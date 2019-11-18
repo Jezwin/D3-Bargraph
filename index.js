@@ -15,9 +15,13 @@ const width = +svg.attr('width');
 
 const render = data => {
   
+  const title = 'Top 10 populous countries';
+  
   //Value accessors. Limits the specifity of code to xValue and yValue
   const xValue = d => d.population;
+  const xAxisLabel = 'Population';
   const yValue = d => d.country;
+  const yAxisLabel = 'Country';
   
   const margin = {top: 60, right: 40, bottom: 70, left: 180};
   const innerWidth = width - margin.left - margin.right;
@@ -43,20 +47,33 @@ const render = data => {
   const xAxisTickFormat = number =>
   	format('.3s')(number)
   		.replace('G', 'B');
+ 
   const xAxis =  axisBottom(xScale)
   	.tickFormat(xAxisTickFormat)
   	//The vertical grid
-  	.tickSize(-innerHeight);
+  	.tickSize(-innerHeight)
+  	.tickPadding(10); //Label distance from X axis
   
   
   const yAxis = axisLeft(yScale)
   	//The horizontal grid
-  	.tickSize(-innerWidth);
-  g.append('g')
-    .call(yAxis)
-  	//Remove '.tick line' to show the horizontal grid
-  	.selectAll('.domain, .tick line')
-  		.remove();
+  	.tickSize(-innerWidth)
+  	.tickPadding(10); //Label distance from Y axis;
+  
+  
+  //Call to Y axis
+  const yAxisG = g.append('g').call(yAxis);
+  //Remove '.tick line' to show the horizontal grid
+  yAxisG.selectAll('.domain, .tick line').remove();
+  
+	yAxisG.append('text')
+  	.attr('y', -110)
+  	.attr('class', 'axis-label')
+  	.attr('x', -innerHeight/2)
+  	.attr('fill', 'black')
+  	.attr('transform', 'rotate(-90)')
+  	.attr('text-anchor', 'middle')
+  	.text(yAxisLabel);
   
   //Call to X axis
   const xAxisG = g.append('g').call(xAxis)
@@ -70,7 +87,7 @@ const render = data => {
   	.attr('class', 'axis-label')
   	.attr('x', innerWidth/2)
   	.attr('fill', 'black')
-  	.text('Population');
+  	.text(xAxisLabel);
   
 	g.selectAll('rect').data(data)
   	.enter().append('rect')
@@ -82,7 +99,7 @@ const render = data => {
   g.append('text')
   	.attr('class', 'title')
   	.attr('y', -10)
-  	.text('The Bargraph');
+  	.text(title);
 };
 
 csv('data.csv').then(data => { 
