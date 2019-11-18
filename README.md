@@ -1,4 +1,5 @@
-The D3 bargraph
+The D3 Bargraph
+
 
 Vizhub working repo: https://vizhub.com/Jezwin/a03d9f81ec1f4dcfb423037d88161470
 
